@@ -14,7 +14,7 @@ import {
     children,
     ...props
   }: ContainerProps<C>) {
-    const Component = as || 'div';
+    const Component = as??'div';
     return (
       <Component {...props}>
         {children}
