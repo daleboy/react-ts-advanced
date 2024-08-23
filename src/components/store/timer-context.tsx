@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext, useReducer } from "react";
+import { type ReactNode, createContext, useContext, useReducer,useState,useEffect } from "react";
 
 export type Timer = {
   name: string;
@@ -32,7 +32,7 @@ export function useTimerContext() {
 }
 
 type TimersContextProviderProps = {
-  children: ReactNode;
+  readonly children: ReactNode;
 };
 
 type TimerStartAction = {
@@ -75,20 +75,28 @@ function TimersReducer(state: TimersState, action: Action): TimersState {
 function TimerContextProvider({ children }: TimersContextProviderProps) {
   const [timersState, dispatch] = useReducer(TimersReducer, initialState);
 
-  //创建一个context实例
-  const ctx: TimerContextValue = {
+  //创建一个context实例 ctx
+  const [ctx, setCtx] = useState<TimerContextValue>({
     timers: timersState.timers,
     isRunning: timersState.isRunning,
-    addTimer(timerData) {
+    addTimer: (timerData) => {
       dispatch({ type: "ADD_ACTION", payload: timerData });
     },
-    startTimer() {
+    startTimer: () => {
       dispatch({ type: "START_ACTION" });
     },
-    stopTimer() {
+    stopTimer: () => {
       dispatch({ type: "STOP_ACTION" });
     },
-  };
+  });
+
+  useEffect(() => {
+    setCtx((prevCtx) => ({
+      ...prevCtx,
+      timers: timersState.timers,
+      isRunning: timersState.isRunning,
+    }));
+  }, [timersState.timers, timersState.isRunning]);
   return (
     <TimersContext.Provider value={ctx}>{children}</TimersContext.Provider>
   );

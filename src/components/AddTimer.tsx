@@ -2,7 +2,7 @@ import { useRef } from "react";
 import Form from "./UI/Form";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
-import { FormHandler } from "./UI/Form";
+import { type FormHandler } from "./UI/Form";
 import { useTimerContext } from "./store/timer-context";
 
 export default function AddTimer() {
